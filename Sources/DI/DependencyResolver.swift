@@ -12,7 +12,7 @@ public class DependencyResolver {
     public typealias ModuleDeclaration = (DependencyResolver) -> Void
 
     /// Public accessor to god object
-    static let shared = DependencyResolver()
+    public static let shared = DependencyResolver()
 
     /// The collection of single instances
     private var singles   = [String: Any]()
