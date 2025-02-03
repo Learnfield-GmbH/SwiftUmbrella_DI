@@ -9,5 +9,9 @@ public class InjectUtils {
     public static func loadModules(_ resolver: DependencyResolver.ModuleDeclaration) {
         resolver(DependencyResolver.shared)
     }
-
+    
+    // Create a method to expose the clear method of Dependency Resolver
+    public static func clear() {
+        DependencyResolver.shared.clear()
+    }
 }
