@@ -47,4 +47,10 @@ public class DependencyResolver {
 
         fatalError("Dependency '\(key)' could not be resolved")
     }
+    
+    /// Clear all registered dependencies
+    public func clear() {
+        singles.removeAll()
+        factories.removeAll()
+    }
 }
