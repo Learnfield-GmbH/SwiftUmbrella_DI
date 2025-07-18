@@ -16,13 +16,14 @@ public class DependencyResolver {
 
     /// The collection of single instances
     private var singles   = [String: Any]()
+    private var singleFactories = [String: FactoryCallback]()
+
     /// The collection of multi instances
     private var factories = [String: FactoryCallback]()
 
-    /// Register a singleton dependency. It will always be resolved a single
-    ///  instance if registered with this method
-    public func single<TYPE>(_ resolver: () -> TYPE) {
-        singles[String(describing: TYPE.self)] = resolver()
+    /// Register a lazy singleton dependency. It will register a factory for the
+    public func single<TYPE>(_ resolver: @escaping () -> TYPE) {
+        singleFactories[String(describing: TYPE.self)] = resolver
     }
 
     /// Register a factory function for a dependency. It will always create a new
@@ -41,8 +42,13 @@ public class DependencyResolver {
             return single
         }
 
-        if let factory = factories[key]?() as? TYPE {
-            return factory
+        if let singleFactoryResult = singleFactories[key]?() as? TYPE {
+            singles[key] = singleFactoryResult
+            return singleFactoryResult
+        }
+
+        if let factoryResult = factories[key]?() as? TYPE {
+            return factoryResult
         }
 
         fatalError("Dependency '\(key)' could not be resolved")
